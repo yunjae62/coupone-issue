@@ -1,6 +1,6 @@
 package ex.couponissue.coupon.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import com.github.ksuid.KsuidGenerator;
 import ex.couponissue.coupon.domain.Coupon;
@@ -17,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class CouponIssueServiceTest {
 
+    private static final Integer maxQuantity = 100;
     private String couponId;
 
     @Autowired
@@ -27,7 +28,7 @@ class CouponIssueServiceTest {
 
     @BeforeEach
     void setUp() {
-        Coupon coupon = Coupon.create(KsuidGenerator.generate(), "쿠폰-1", 0, 1000000);
+        Coupon coupon = Coupon.create(KsuidGenerator.generate(), "쿠폰-1", 0, maxQuantity);
         Coupon savedCoupon = couponRepository.save(coupon);
         couponId = savedCoupon.getId();
     }
@@ -38,8 +39,8 @@ class CouponIssueServiceTest {
     }
 
     @Test
-    public void 동시에_100명이_주문() throws InterruptedException {
-        int threadCount = 100;
+    public void 동시_쿠폰_발급() throws InterruptedException {
+        int threadCount = maxQuantity;
         ExecutorService executorService = Executors.newFixedThreadPool(32);
         CountDownLatch latch = new CountDownLatch(threadCount);
 
@@ -58,6 +59,6 @@ class CouponIssueServiceTest {
         Coupon coupon = couponRepository.findById(couponId).orElseThrow();
 
         // 100 - (100 * 1) = 0
-        assertEquals(0, coupon.getNowQuantity());
+        assertThat(coupon.getNowQuantity()).isEqualTo(maxQuantity);
     }
 }
