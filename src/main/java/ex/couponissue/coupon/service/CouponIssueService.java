@@ -34,4 +34,16 @@ public class CouponIssueService {
         CouponIssue couponIssue = CouponIssue.create(KsuidGenerator.generate(), userId, coupon);
         couponIssueRepository.save(couponIssue);
     }
+
+    @Transactional
+    public void issueWithOptimisticLock(String couponId, String userId) {
+        // 쿠폰 조회
+        Coupon coupon = couponRepository.findByIdWithOptimisticLock(couponId)
+            .orElseThrow(() -> new HttpClientErrorException(HttpStatusCode.valueOf(404), "존재하지 않는 쿠폰입니다."));
+
+        // 쿠폰 발급
+        coupon.issue();
+        CouponIssue couponIssue = CouponIssue.create(KsuidGenerator.generate(), userId, coupon);
+        couponIssueRepository.save(couponIssue);
+    }
 }
