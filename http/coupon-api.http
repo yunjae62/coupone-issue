@@ -1,5 +1,5 @@
 # 위의 다음으로 실행을 dev로 변경해주세요.
-### 쿠폰 발급
+### 쿠폰 생성
 POST {{URL}}/coupons
 Content-Type: application/json
 
