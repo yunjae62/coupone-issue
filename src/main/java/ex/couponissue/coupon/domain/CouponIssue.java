@@ -1,6 +1,5 @@
 package ex.couponissue.coupon.domain;
 
-import com.github.ksuid.KsuidGenerator;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -31,10 +30,10 @@ public class CouponIssue {
     @JoinColumn(name = "coupon_id", nullable = false)
     private Coupon coupon;
 
-    public static CouponIssue create(String userId, Coupon coupon) {
+    public static CouponIssue create(String id, String userId, Coupon coupon) {
         CouponIssue couponIssue = new CouponIssue();
 
-        couponIssue.id = KsuidGenerator.generate();
+        couponIssue.id = id;
         couponIssue.userId = userId;
         couponIssue.status = CouponStatus.ISSUED;
         couponIssue.coupon = coupon;
