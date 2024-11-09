@@ -21,19 +21,19 @@ public class Coupon {
     private String id;
 
     private String name;
-    private Integer maxQuantity;
     private Integer nowQuantity;
+    private Integer maxQuantity;
 
     @OneToMany(mappedBy = "coupon", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
     private Set<CouponIssue> couponIssues;
 
-    public static Coupon create(String name, Integer maxQuantity, Integer nowQuantity) {
+    public static Coupon create(String name, Integer nowQuantity, Integer maxQuantity) {
         Coupon coupon = new Coupon();
 
         coupon.id = KsuidGenerator.generate();
         coupon.name = name;
-        coupon.maxQuantity = maxQuantity;
         coupon.nowQuantity = nowQuantity;
+        coupon.maxQuantity = maxQuantity;
 
         return coupon;
     }
