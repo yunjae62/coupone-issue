@@ -1,0 +1,21 @@
+# 위의 다음으로 실행을 dev로 변경해주세요.
+### 쿠폰 발급
+POST {{URL}}/coupons
+Content-Type: application/json
+
+{
+  "name": "쿠폰1",
+  "maxQuantity": 1000
+}
+
+> {%
+  client.test("성공 응답은 200", () => client.assert(response.status === 200, "응답 상태가 200이어야 합니다."));
+  client.global.set("COUPON_ID", response.body.id);
+%}
+
+### 쿠폰 단건 조회
+GET {{URL}}/coupons/{{COUPON_ID}}
+
+> {%
+  client.test("성공 응답은 200", () => client.assert(response.status === 200, "응답 상태가 200이어야 합니다."));
+%}
