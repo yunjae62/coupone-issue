@@ -21,7 +21,7 @@ public class CouponIssueController {
      */
     @PostMapping("/coupons/{couponId}/issue")
     public ResponseEntity<?> issueCoupon(@PathVariable String couponId, @RequestParam String userId) {
-        couponIssueService.issue(couponId, userId);
+        couponIssueService.issueWithPessimisticLock(couponId, userId);
         return ResponseEntity.ok().build();
     }
 }

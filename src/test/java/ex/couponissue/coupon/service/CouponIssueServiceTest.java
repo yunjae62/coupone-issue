@@ -47,7 +47,7 @@ class CouponIssueServiceTest {
         for (int i = 0; i < threadCount; i++) {
             executorService.submit(() -> {
                 try {
-                    couponIssueService.issue(couponId, KsuidGenerator.generate());
+                    couponIssueService.issueWithPessimisticLock(couponId, KsuidGenerator.generate());
                 } finally {
                     latch.countDown();
                 }
