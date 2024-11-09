@@ -1,5 +1,6 @@
 package ex.couponissue.coupon.service;
 
+import com.github.ksuid.KsuidGenerator;
 import ex.couponissue.coupon.domain.Coupon;
 import ex.couponissue.coupon.dto.request.CouponCreateReq;
 import ex.couponissue.coupon.dto.response.CouponGetRes;
@@ -35,7 +36,7 @@ public class CouponService {
      */
     @Transactional
     public CouponGetRes createCoupon(CouponCreateReq request) {
-        Coupon coupon = Coupon.create(request.name(), 0, request.maxQuantity());
+        Coupon coupon = Coupon.create(KsuidGenerator.generate(), request.name(), 0, request.maxQuantity());
         Coupon savedCoupon = couponRepository.save(coupon);
         return couponMapper.toCouponGetRes(savedCoupon);
     }
