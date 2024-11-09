@@ -26,7 +26,7 @@ public class CouponIssueService {
     @Transactional
     public void issue(String couponId, String userId) {
         // 쿠폰 조회
-        Coupon coupon = couponRepository.findById(couponId)
+        Coupon coupon = couponRepository.findByIdWithPessimisticLock(couponId)
             .orElseThrow(() -> new HttpClientErrorException(HttpStatusCode.valueOf(404), "존재하지 않는 쿠폰입니다."));
 
         // 쿠폰 발급
