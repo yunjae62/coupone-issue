@@ -19,3 +19,10 @@ GET {{URL}}/coupons/{{COUPON_ID}}
 > {%
   client.test("성공 응답은 200", () => client.assert(response.status === 200, "응답 상태가 200이어야 합니다."));
 %}
+
+### 쿠폰 발급
+POST {{URL}}/coupons/{{COUPON_ID}}/issue?userId=1
+
+> {%
+  client.test("성공 응답은 200", () => client.assert(response.status === 200, "응답 상태가 200이어야 합니다."));
+%}
