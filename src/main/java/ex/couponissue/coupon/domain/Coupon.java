@@ -1,6 +1,5 @@
 package ex.couponissue.coupon.domain;
 
-import com.github.ksuid.KsuidGenerator;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -27,10 +26,10 @@ public class Coupon {
     @OneToMany(mappedBy = "coupon", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
     private Set<CouponIssue> couponIssues;
 
-    public static Coupon create(String name, Integer nowQuantity, Integer maxQuantity) {
+    public static Coupon create(String id, String name, Integer nowQuantity, Integer maxQuantity) {
         Coupon coupon = new Coupon();
 
-        coupon.id = KsuidGenerator.generate();
+        coupon.id = id;
         coupon.name = name;
         coupon.nowQuantity = nowQuantity;
         coupon.maxQuantity = maxQuantity;
