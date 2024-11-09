@@ -1,9 +1,12 @@
 package ex.couponissue.coupon.domain;
 
 import com.github.ksuid.KsuidGenerator;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.util.Set;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,6 +23,9 @@ public class Coupon {
     private String name;
     private Integer maxQuantity;
     private Integer nowQuantity;
+
+    @OneToMany(mappedBy = "coupon", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
+    private Set<CouponIssue> couponIssues;
 
     public static Coupon create(String name, Integer maxQuantity, Integer nowQuantity) {
         Coupon coupon = new Coupon();
