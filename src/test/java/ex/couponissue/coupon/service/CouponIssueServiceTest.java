@@ -24,6 +24,9 @@ class CouponIssueServiceTest {
     private CouponIssueService couponIssueService;
 
     @Autowired
+    private CouponIssueOptimisticLockFacade couponIssueOptimisticLockFacade;
+
+    @Autowired
     private CouponRepository couponRepository;
 
     @BeforeEach
@@ -57,8 +60,28 @@ class CouponIssueServiceTest {
         latch.await();
 
         Coupon coupon = couponRepository.findById(couponId).orElseThrow();
+        assertThat(coupon.getNowQuantity()).isEqualTo(maxQuantity);
+    }
 
-        // 100 - (100 * 1) = 0
+    @Test
+    public void 동시_쿠폰_발급_낙관적락() throws InterruptedException {
+        int threadCount = maxQuantity;
+        ExecutorService executorService = Executors.newFixedThreadPool(32);
+        CountDownLatch latch = new CountDownLatch(threadCount);
+
+        for (int i = 0; i < threadCount; i++) {
+            executorService.submit(() -> {
+                try {
+                    couponIssueOptimisticLockFacade.issue(couponId, KsuidGenerator.generate());
+                } finally {
+                    latch.countDown();
+                }
+            });
+        }
+
+        latch.await();
+
+        Coupon coupon = couponRepository.findById(couponId).orElseThrow();
         assertThat(coupon.getNowQuantity()).isEqualTo(maxQuantity);
     }
 }
