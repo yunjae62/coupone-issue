@@ -2,6 +2,7 @@ package ex.couponissue.coupon.endpoint;
 
 import ex.couponissue.coupon.dto.request.CouponCreateReq;
 import ex.couponissue.coupon.dto.response.CouponGetRes;
+import ex.couponissue.coupon.service.CouponIssueOptimisticLockFacade;
 import ex.couponissue.coupon.service.CouponIssueService;
 import ex.couponissue.coupon.service.CouponService;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ public class CouponController {
 
     private final CouponService couponService;
     private final CouponIssueService couponIssueService;
+    private final CouponIssueOptimisticLockFacade couponIssueOptimisticLockFacade;
 
     /**
      * 쿠폰 단건 조회
@@ -46,8 +48,9 @@ public class CouponController {
      * 쿠폰 발급
      */
     @PostMapping("/{couponId}/issue")
-    public ResponseEntity<?> issueCoupon(@PathVariable String couponId, @RequestParam String userId) {
-        couponIssueService.issueWithPessimisticLock(couponId, userId);
+    public ResponseEntity<Void> issueCoupon(@PathVariable String couponId, @RequestParam String userId) {
+//        couponIssueService.issueWithPessimisticLock(couponId, userId);
+        couponIssueOptimisticLockFacade.issue(couponId, userId);
         return ResponseEntity.ok().build();
     }
 }
