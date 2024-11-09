@@ -39,7 +39,7 @@ class CouponIssueServiceTest {
     }
 
     @Test
-    public void 동시_쿠폰_발급() throws InterruptedException {
+    public void 동시_쿠폰_발급_비관적락() throws InterruptedException {
         int threadCount = maxQuantity;
         ExecutorService executorService = Executors.newFixedThreadPool(32);
         CountDownLatch latch = new CountDownLatch(threadCount);
