@@ -1,5 +1,6 @@
 package ex.couponissue.coupon.service;
 
+import com.github.ksuid.KsuidGenerator;
 import ex.couponissue.coupon.domain.Coupon;
 import ex.couponissue.coupon.domain.CouponIssue;
 import ex.couponissue.coupon.infra.CouponIssueRepository;
@@ -30,7 +31,7 @@ public class CouponIssueService {
 
         // 쿠폰 발급
         coupon.issue();
-        CouponIssue couponIssue = CouponIssue.create(userId, coupon);
+        CouponIssue couponIssue = CouponIssue.create(KsuidGenerator.generate(), userId, coupon);
         couponIssueRepository.save(couponIssue);
     }
 }
