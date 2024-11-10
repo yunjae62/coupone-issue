@@ -5,7 +5,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.Version;
 import java.util.Set;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -24,7 +23,7 @@ public class Coupon {
     private Integer nowQuantity;
     private Integer maxQuantity;
 
-    @Version
+    //    @Version // 낙관적 락에 필요
     private Long version;
 
     @OneToMany(mappedBy = "coupon", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
