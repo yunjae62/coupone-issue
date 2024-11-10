@@ -27,6 +27,9 @@ class CouponIssueServiceTest {
     private CouponIssueOptimisticLockFacade couponIssueOptimisticLockFacade;
 
     @Autowired
+    private CouponIssueDistributeLockFacade couponIssueDistributeLockFacade;
+
+    @Autowired
     private CouponRepository couponRepository;
 
     @BeforeEach
@@ -49,6 +52,11 @@ class CouponIssueServiceTest {
     @Test
     public void 동시_쿠폰_발급_낙관적락() throws InterruptedException {
         concurrentTest(() -> couponIssueOptimisticLockFacade.issue(couponId, KsuidGenerator.generate()));
+    }
+
+    @Test
+    public void 동시_쿠폰_발급_분산락() throws InterruptedException {
+        concurrentTest(() -> couponIssueDistributeLockFacade.issue(couponId, KsuidGenerator.generate()));
     }
 
     private void concurrentTest(Runnable logic) throws InterruptedException {
