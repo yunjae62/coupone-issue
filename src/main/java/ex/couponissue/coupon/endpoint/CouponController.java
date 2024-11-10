@@ -51,9 +51,10 @@ public class CouponController {
      */
     @PostMapping("/{couponId}/issue")
     public ResponseEntity<Void> issueCoupon(@PathVariable String couponId, @RequestParam String userId) {
-//        couponIssueService.issueWithPessimisticLock(couponId, userId);
-//        couponIssueOptimisticLockFacade.issue(couponId, userId);
-        couponIssueDistributeLockFacade.issue(couponId, userId);
+//        couponIssueService.issueWithPessimisticLock(couponId, userId); // 비관락
+//        couponIssueOptimisticLockFacade.issue(couponId, userId); // 낙관락
+//        couponIssueDistributeLockFacade.issue(couponId, userId); // 분산락
+        couponIssueService.issueWithLuaScriptAndKafka(couponId, userId);
         return ResponseEntity.ok().build();
     }
 }
