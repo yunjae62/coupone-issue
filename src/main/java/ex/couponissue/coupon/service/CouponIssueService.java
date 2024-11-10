@@ -21,7 +21,7 @@ public class CouponIssueService {
     private final CouponIssueRepository couponIssueRepository;
 
     /**
-     * 쿠폰 발급
+     * 쿠폰 발급 - 비관적 락
      */
     @Transactional
     public void issueWithPessimisticLock(String couponId, String userId) {
@@ -35,6 +35,9 @@ public class CouponIssueService {
         couponIssueRepository.save(couponIssue);
     }
 
+    /**
+     * 쿠폰 발급 - 낙관적 락
+     */
     @Transactional
     public void issueWithOptimisticLock(String couponId, String userId) {
         // 쿠폰 조회
