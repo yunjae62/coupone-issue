@@ -43,36 +43,22 @@ class CouponIssueServiceTest {
 
     @Test
     public void 동시_쿠폰_발급_비관적락() throws InterruptedException {
-        int threadCount = maxQuantity;
-        ExecutorService executorService = Executors.newFixedThreadPool(32);
-        CountDownLatch latch = new CountDownLatch(threadCount);
-
-        for (int i = 0; i < threadCount; i++) {
-            executorService.submit(() -> {
-                try {
-                    couponIssueService.issueWithPessimisticLock(couponId, KsuidGenerator.generate());
-                } finally {
-                    latch.countDown();
-                }
-            });
-        }
-
-        latch.await();
-
-        Coupon coupon = couponRepository.findById(couponId).orElseThrow();
-        assertThat(coupon.getNowQuantity()).isEqualTo(maxQuantity);
+        concurrentTest(() -> couponIssueService.issueWithPessimisticLock(couponId, KsuidGenerator.generate()));
     }
 
     @Test
     public void 동시_쿠폰_발급_낙관적락() throws InterruptedException {
-        int threadCount = maxQuantity;
-        ExecutorService executorService = Executors.newFixedThreadPool(32);
-        CountDownLatch latch = new CountDownLatch(threadCount);
+        concurrentTest(() -> couponIssueOptimisticLockFacade.issue(couponId, KsuidGenerator.generate()));
+    }
 
-        for (int i = 0; i < threadCount; i++) {
+    private void concurrentTest(Runnable logic) throws InterruptedException {
+        ExecutorService executorService = Executors.newFixedThreadPool(32);
+        CountDownLatch latch = new CountDownLatch(maxQuantity);
+
+        for (int i = 0; i < maxQuantity; i++) {
             executorService.submit(() -> {
                 try {
-                    couponIssueOptimisticLockFacade.issue(couponId, KsuidGenerator.generate());
+                    logic.run();
                 } finally {
                     latch.countDown();
                 }
