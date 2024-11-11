@@ -5,6 +5,7 @@ import ex.couponissue.coupon.dto.response.CouponGetRes;
 import ex.couponissue.coupon.service.CouponIssueService;
 import ex.couponissue.coupon.service.CouponService;
 import ex.couponissue.coupon.service.distribute.CouponIssueDistributeLockFacade;
+import ex.couponissue.coupon.service.lua_kafka.CouponIssueLuaKafkaService;
 import ex.couponissue.coupon.service.optimistic.CouponIssueOptimisticLockFacade;
 import ex.couponissue.coupon.service.pessimistic.CouponIssuePessimisticService;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,7 @@ public class CouponController {
     private final CouponIssueService couponIssueService;
     private final CouponIssueOptimisticLockFacade couponIssueOptimisticLockFacade;
     private final CouponIssueDistributeLockFacade couponIssueDistributeLockFacade;
+    private final CouponIssueLuaKafkaService couponIssueLuaKafkaService;
 
     /**
      * 쿠폰 단건 조회
@@ -84,6 +86,15 @@ public class CouponController {
     @PostMapping("/{couponId}/issue/distribute")
     public ResponseEntity<Void> issueCouponWithDistribute(@PathVariable String couponId, @RequestParam String userId) {
         couponIssueDistributeLockFacade.issue(couponId, userId);
+        return ResponseEntity.ok().build();
+    }
+
+    /**
+     * 쿠폰 발급 - LuaScript + Kafka
+     */
+    @PostMapping("/{couponId}/issue/lua-kafka")
+    public ResponseEntity<Void> issueCouponWithLuaKafka(@PathVariable String couponId, @RequestParam String userId) {
+        couponIssueLuaKafkaService.issue(couponId, userId);
         return ResponseEntity.ok().build();
     }
 }

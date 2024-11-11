@@ -25,7 +25,7 @@ public class CouponIssueLuaKafkaService {
     /**
      * 쿠폰 발급 - LuaScript + Kafka
      */
-    public void issueWithLuaScriptAndKafka(String couponId, String userId) {
+    public void issue(String couponId, String userId) {
         // Redis+LuaScript를 이용한 쿠폰 발급 줄세우기
         int maxQuantity = redisService.getMaxQuantity(couponId); // 캐싱된 쿠폰의 최대 발급량 조회
         redisService.issueInRedis(couponId, userId, maxQuantity); // 레디스에 쿠폰 발급 요청 저장
