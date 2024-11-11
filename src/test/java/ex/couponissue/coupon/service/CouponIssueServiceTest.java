@@ -7,6 +7,7 @@ import ex.couponissue.coupon.domain.Coupon;
 import ex.couponissue.coupon.infra.CouponRepository;
 import ex.couponissue.coupon.service.distribute.CouponIssueDistributeLockFacade;
 import ex.couponissue.coupon.service.optimistic.CouponIssueOptimisticLockFacade;
+import ex.couponissue.coupon.service.pessimistic.CouponIssuePessimisticService;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -23,7 +24,7 @@ class CouponIssueServiceTest {
     private String couponId;
 
     @Autowired
-    private CouponIssueService couponIssueService;
+    private CouponIssuePessimisticService couponIssuePessimisticService;
 
     @Autowired
     private CouponIssueOptimisticLockFacade couponIssueOptimisticLockFacade;
@@ -48,7 +49,7 @@ class CouponIssueServiceTest {
 
     @Test
     public void 동시_쿠폰_발급_비관적락() throws InterruptedException {
-        concurrentTest(() -> couponIssueService.issueWithPessimisticLock(couponId, KsuidGenerator.generate()));
+        concurrentTest(() -> couponIssuePessimisticService.issue(couponId, KsuidGenerator.generate()));
     }
 
     @Test

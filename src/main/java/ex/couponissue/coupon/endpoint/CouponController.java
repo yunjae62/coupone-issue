@@ -2,7 +2,6 @@ package ex.couponissue.coupon.endpoint;
 
 import ex.couponissue.coupon.dto.request.CouponCreateReq;
 import ex.couponissue.coupon.dto.response.CouponGetRes;
-import ex.couponissue.coupon.service.CouponIssueService;
 import ex.couponissue.coupon.service.CouponService;
 import ex.couponissue.coupon.service.distribute.CouponIssueDistributeLockFacade;
 import ex.couponissue.coupon.service.lua_kafka.CouponIssueLuaKafkaService;
@@ -26,11 +25,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class CouponController {
 
     private final CouponService couponService;
+    private final CouponIssueLuaKafkaService couponIssueLuaKafkaService;
     private final CouponIssuePessimisticService couponIssuePessimisticService;
-    private final CouponIssueService couponIssueService;
     private final CouponIssueOptimisticLockFacade couponIssueOptimisticLockFacade;
     private final CouponIssueDistributeLockFacade couponIssueDistributeLockFacade;
-    private final CouponIssueLuaKafkaService couponIssueLuaKafkaService;
 
     /**
      * 쿠폰 단건 조회
@@ -51,18 +49,6 @@ public class CouponController {
     }
 
     /**
-     * 쿠폰 발급
-     */
-    @PostMapping("/{couponId}/issue")
-    public ResponseEntity<Void> issueCoupon(@PathVariable String couponId, @RequestParam String userId) {
-//        couponIssueService.issueWithPessimisticLock(couponId, userId); // 비관락
-//        couponIssueOptimisticLockFacade.issue(couponId, userId); // 낙관락
-//        couponIssueDistributeLockFacade.issue(couponId, userId); // 분산락
-        couponIssueService.issueWithLuaScriptAndKafka(couponId, userId); // Redis(Lua Script) + Kafka
-        return ResponseEntity.ok().build();
-    }
-
-    /**
      * 쿠폰 발급 - 비관락
      */
     @PostMapping("/{couponId}/issue/pessimistic")
@@ -72,7 +58,7 @@ public class CouponController {
     }
 
     /**
-     * 쿠폰 발급 - 낙관락
+     * 쿠폰 발급 - 낙관락 *** Coupon 엔티티의 `@Version` 어노테이션 주석 해제 꼭 하세요 ***
      */
     @PostMapping("/{couponId}/issue/optimistic")
     public ResponseEntity<Void> issueCouponWithOptimistic(@PathVariable String couponId, @RequestParam String userId) {

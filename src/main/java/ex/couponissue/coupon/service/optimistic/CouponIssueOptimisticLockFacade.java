@@ -1,6 +1,5 @@
 package ex.couponissue.coupon.service.optimistic;
 
-import ex.couponissue.coupon.service.CouponIssueService;
 import jakarta.persistence.OptimisticLockException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +11,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CouponIssueOptimisticLockFacade {
 
-    private final CouponIssueService couponIssueService;
+    private final CouponIssueOptimisticService couponIssueOptimisticService;
 
     public void issue(String couponId, String userId) {
         int count = 0;
@@ -26,7 +25,7 @@ public class CouponIssueOptimisticLockFacade {
             }
 
             try {
-                couponIssueService.issueWithOptimisticLock(couponId, userId);
+                couponIssueOptimisticService.issueWithOptimisticLock(couponId, userId);
                 log.info("쿠폰 발급 완료 (시도 횟수: {})", count);
                 break;
             } catch (ObjectOptimisticLockingFailureException | OptimisticLockException e) {

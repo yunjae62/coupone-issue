@@ -1,6 +1,5 @@
 package ex.couponissue.coupon.service.distribute;
 
-import ex.couponissue.coupon.service.CouponIssueService;
 import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +13,7 @@ import org.springframework.stereotype.Service;
 public class CouponIssueDistributeLockFacade {
 
     private final RedissonClient redissonClient;
-    private final CouponIssueService couponIssueService;
+    private final CouponIssueDistributeService couponIssueDistributeService;
 
     public void issue(String couponId, String userId) {
         String lockName = "lock_" + couponId;
@@ -27,7 +26,7 @@ public class CouponIssueDistributeLockFacade {
                 throw new IllegalArgumentException("[" + lockName + "] lock 획득 실패");
             }
 
-            couponIssueService.issueWithDistributedLock(couponId, userId);
+            couponIssueDistributeService.issueWithDistributedLock(couponId, userId);
 
         } catch (InterruptedException e) {
             log.error(e.getMessage(), e);
