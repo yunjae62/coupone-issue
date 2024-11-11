@@ -6,6 +6,8 @@ spring:
     url: jdbc:postgresql://localhost:54325/sample
     username: sample
     password: 1234
+    hikari:
+      maximum-pool-size: 80
   data:
     redis:
       host: localhost
