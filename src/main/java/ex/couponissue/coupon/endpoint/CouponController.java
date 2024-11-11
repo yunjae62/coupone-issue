@@ -77,4 +77,13 @@ public class CouponController {
         couponIssueOptimisticLockFacade.issue(couponId, userId);
         return ResponseEntity.ok().build();
     }
+
+    /**
+     * 쿠폰 발급 - 분산락
+     */
+    @PostMapping("/{couponId}/issue/distribute")
+    public ResponseEntity<Void> issueCouponWithDistribute(@PathVariable String couponId, @RequestParam String userId) {
+        couponIssueDistributeLockFacade.issue(couponId, userId);
+        return ResponseEntity.ok().build();
+    }
 }
