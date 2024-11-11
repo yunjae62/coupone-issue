@@ -1,0 +1,8 @@
+global:
+  scrape_interval: 1s  # 데이터 수집 간격
+
+scrape_configs:
+  - job_name: "server"
+    metrics_path: "/actuator/prometheus"
+    static_configs:
+      - targets: [ "host.docker.internal:8080" ]
