@@ -31,6 +31,8 @@ spring:
       stop:
         command: down
         timeout: 1m
+  lifecycle:
+    timeout-per-shutdown-phase: 10s
 
 management:
   endpoints:
@@ -42,3 +44,6 @@ management:
       show-details: always
     prometheus:
       enabled: true
+
+server:
+  shutdown: graceful
