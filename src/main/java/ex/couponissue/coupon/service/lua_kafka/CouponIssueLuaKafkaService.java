@@ -1,7 +1,6 @@
 package ex.couponissue.coupon.service.lua_kafka;
 
 import ex.couponissue.coupon.dto.request.CouponIssueReq;
-import ex.couponissue.coupon.service.RedisService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;

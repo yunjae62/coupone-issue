@@ -1,4 +1,4 @@
-package ex.couponissue.coupon.service;
+package ex.couponissue.coupon.service.lua_kafka;
 
 import ex.couponissue.coupon.domain.Coupon;
 import ex.couponissue.coupon.domain.CouponIssueRequestCode;
