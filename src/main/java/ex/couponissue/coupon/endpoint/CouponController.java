@@ -2,9 +2,9 @@ package ex.couponissue.coupon.endpoint;
 
 import ex.couponissue.coupon.dto.request.CouponCreateReq;
 import ex.couponissue.coupon.dto.response.CouponGetRes;
-import ex.couponissue.coupon.service.CouponIssueDistributeLockFacade;
 import ex.couponissue.coupon.service.CouponIssueService;
 import ex.couponissue.coupon.service.CouponService;
+import ex.couponissue.coupon.service.distribute.CouponIssueDistributeLockFacade;
 import ex.couponissue.coupon.service.optimistic.CouponIssueOptimisticLockFacade;
 import ex.couponissue.coupon.service.pessimistic.CouponIssuePessimisticService;
 import lombok.RequiredArgsConstructor;

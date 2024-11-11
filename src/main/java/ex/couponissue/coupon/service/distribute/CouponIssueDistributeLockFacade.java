@@ -1,5 +1,6 @@
-package ex.couponissue.coupon.service;
+package ex.couponissue.coupon.service.distribute;
 
+import ex.couponissue.coupon.service.CouponIssueService;
 import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
