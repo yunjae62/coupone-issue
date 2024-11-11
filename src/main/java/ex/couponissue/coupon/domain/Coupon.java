@@ -26,7 +26,7 @@ public class Coupon {
     //    @Version // 낙관적 락에 필요
     private Long version;
 
-    @OneToMany(mappedBy = "coupon", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
+    @OneToMany(mappedBy = "coupon", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true)
     private Set<CouponIssue> couponIssues;
 
     public static Coupon create(String id, String name, Integer nowQuantity, Integer maxQuantity) {

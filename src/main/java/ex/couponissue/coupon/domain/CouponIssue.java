@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "coupon_issues")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class CouponIssue {
+public class CouponIssue extends BaseEntity {
 
     @Id
     private String id;
