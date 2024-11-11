@@ -9,7 +9,7 @@ class HelloWorld(FastHttpUser):
 
   @task
   def issue(self):
-    couponId = "2obglswPnFn8RG9lnqFY1Ucl8qg"  # 여기에 쿠폰id 만들어서 넣기
+    couponId = "2oeJ7WOeFLztfouBhspbJn3rsFd"
     userId = random.randint(1, 10000000)
 
     with self.rest("POST", f"/coupons/{couponId}/issue?userId={userId}"):
