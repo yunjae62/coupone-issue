@@ -6,6 +6,7 @@ import ex.couponissue.coupon.service.CouponIssueDistributeLockFacade;
 import ex.couponissue.coupon.service.CouponIssueOptimisticLockFacade;
 import ex.couponissue.coupon.service.CouponIssueService;
 import ex.couponissue.coupon.service.CouponService;
+import ex.couponissue.coupon.service.pessimistic.CouponIssuePessimisticService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class CouponController {
 
     private final CouponService couponService;
+    private final CouponIssuePessimisticService couponIssuePessimisticService;
     private final CouponIssueService couponIssueService;
     private final CouponIssueOptimisticLockFacade couponIssueOptimisticLockFacade;
     private final CouponIssueDistributeLockFacade couponIssueDistributeLockFacade;
@@ -55,6 +57,15 @@ public class CouponController {
 //        couponIssueOptimisticLockFacade.issue(couponId, userId); // 낙관락
 //        couponIssueDistributeLockFacade.issue(couponId, userId); // 분산락
         couponIssueService.issueWithLuaScriptAndKafka(couponId, userId);
+        return ResponseEntity.ok().build();
+    }
+
+    /**
+     * 쿠폰 발급 - 비관락
+     */
+    @PostMapping("/{couponId}/issue/pessimistic")
+    public ResponseEntity<Void> issueCouponWithPessimistic(@PathVariable String couponId, @RequestParam String userId) {
+        couponIssuePessimisticService.issue(couponId, userId);
         return ResponseEntity.ok().build();
     }
 }
