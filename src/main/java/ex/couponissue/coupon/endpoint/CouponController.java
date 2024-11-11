@@ -56,7 +56,7 @@ public class CouponController {
 //        couponIssueService.issueWithPessimisticLock(couponId, userId); // 비관락
 //        couponIssueOptimisticLockFacade.issue(couponId, userId); // 낙관락
 //        couponIssueDistributeLockFacade.issue(couponId, userId); // 분산락
-        couponIssueService.issueWithLuaScriptAndKafka(couponId, userId);
+        couponIssueService.issueWithLuaScriptAndKafka(couponId, userId); // Redis(Lua Script) + Kafka
         return ResponseEntity.ok().build();
     }
 
@@ -66,6 +66,15 @@ public class CouponController {
     @PostMapping("/{couponId}/issue/pessimistic")
     public ResponseEntity<Void> issueCouponWithPessimistic(@PathVariable String couponId, @RequestParam String userId) {
         couponIssuePessimisticService.issue(couponId, userId);
+        return ResponseEntity.ok().build();
+    }
+
+    /**
+     * 쿠폰 발급 - 낙관락
+     */
+    @PostMapping("/{couponId}/issue/optimistic")
+    public ResponseEntity<Void> issueCouponWithOptimistic(@PathVariable String couponId, @RequestParam String userId) {
+        couponIssueOptimisticLockFacade.issue(couponId, userId);
         return ResponseEntity.ok().build();
     }
 }
