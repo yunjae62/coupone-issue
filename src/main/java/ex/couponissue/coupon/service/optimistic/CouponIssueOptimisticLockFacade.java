@@ -1,5 +1,6 @@
-package ex.couponissue.coupon.service;
+package ex.couponissue.coupon.service.optimistic;
 
+import ex.couponissue.coupon.service.CouponIssueService;
 import jakarta.persistence.OptimisticLockException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,12 +16,15 @@ public class CouponIssueOptimisticLockFacade {
 
     public void issue(String couponId, String userId) {
         int count = 0;
+
         while (true) {
             count++;
-//            if (count > 10) {
-//                log.error("쿠폰 발급에 실패했습니다.");
-//                throw new RuntimeException("쿠폰 발급에 실패했습니다.");
-//            }
+
+            if (count > 50) {
+                log.error("쿠폰 발급에 실패했습니다.");
+                throw new RuntimeException("쿠폰 발급에 실패했습니다.");
+            }
+
             try {
                 couponIssueService.issueWithOptimisticLock(couponId, userId);
                 log.info("쿠폰 발급 완료 (시도 횟수: {})", count);
