@@ -3,7 +3,7 @@ package ex.couponissue.coupon.endpoint;
 import ex.couponissue.coupon.dto.request.CouponCreateReq;
 import ex.couponissue.coupon.dto.response.CouponGetRes;
 import ex.couponissue.coupon.service.CouponService;
-import ex.couponissue.coupon.service.distribute.CouponIssueDistributeLockFacade;
+import ex.couponissue.coupon.service.distribute.CouponIssueDistributeService;
 import ex.couponissue.coupon.service.lua_kafka.CouponIssueLuaKafkaService;
 import ex.couponissue.coupon.service.optimistic.CouponIssueOptimisticLockFacade;
 import ex.couponissue.coupon.service.pessimistic.CouponIssuePessimisticService;
@@ -28,7 +28,7 @@ public class CouponController {
     private final CouponIssueLuaKafkaService couponIssueLuaKafkaService;
     private final CouponIssuePessimisticService couponIssuePessimisticService;
     private final CouponIssueOptimisticLockFacade couponIssueOptimisticLockFacade;
-    private final CouponIssueDistributeLockFacade couponIssueDistributeLockFacade;
+    private final CouponIssueDistributeService couponIssueDistributeService;
 
     /**
      * 쿠폰 단건 조회
@@ -71,7 +71,7 @@ public class CouponController {
      */
     @PostMapping("/{couponId}/issue/distribute")
     public ResponseEntity<Void> issueCouponWithDistribute(@PathVariable String couponId, @RequestParam String userId) {
-        couponIssueDistributeLockFacade.issue(couponId, userId);
+        couponIssueDistributeService.issue(couponId, userId);
         return ResponseEntity.ok().build();
     }
 

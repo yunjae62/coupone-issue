@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.github.ksuid.KsuidGenerator;
 import ex.couponissue.coupon.domain.Coupon;
 import ex.couponissue.coupon.infra.CouponRepository;
-import ex.couponissue.coupon.service.distribute.CouponIssueDistributeLockFacade;
+import ex.couponissue.coupon.service.distribute.CouponIssueDistributeService;
 import ex.couponissue.coupon.service.optimistic.CouponIssueOptimisticLockFacade;
 import ex.couponissue.coupon.service.pessimistic.CouponIssuePessimisticService;
 import java.util.concurrent.CountDownLatch;
@@ -30,7 +30,7 @@ class CouponIssueServiceTest {
     private CouponIssueOptimisticLockFacade couponIssueOptimisticLockFacade;
 
     @Autowired
-    private CouponIssueDistributeLockFacade couponIssueDistributeLockFacade;
+    private CouponIssueDistributeService couponIssueDistributeService;
 
     @Autowired
     private CouponRepository couponRepository;
@@ -59,7 +59,7 @@ class CouponIssueServiceTest {
 
     @Test
     public void 동시_쿠폰_발급_분산락() throws InterruptedException {
-        concurrentTest(() -> couponIssueDistributeLockFacade.issue(couponId, KsuidGenerator.generate()));
+        concurrentTest(() -> couponIssueDistributeService.issue(couponId, KsuidGenerator.generate()));
     }
 
     private void concurrentTest(Runnable logic) throws InterruptedException {
