@@ -1,4 +1,4 @@
-package ex.couponissue.aop;
+package ex.couponissue.aop.distribute;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

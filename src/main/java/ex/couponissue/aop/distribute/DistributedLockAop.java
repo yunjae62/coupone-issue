@@ -1,5 +1,7 @@
-package ex.couponissue.aop;
+package ex.couponissue.aop.distribute;
 
+import ex.couponissue.aop.AopForTransaction;
+import ex.couponissue.aop.CustomSpringELParser;
 import java.lang.reflect.Method;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +24,7 @@ public class DistributedLockAop {
     private final RedissonClient redissonClient;
     private final AopForTransaction aopForTransaction;
 
-    @Around("@annotation(ex.couponissue.aop.DistributedLock)")
+    @Around("@annotation(ex.couponissue.aop.distribute.DistributedLock)")
     public Object lock(final ProceedingJoinPoint joinPoint) throws Throwable {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Method method = signature.getMethod();

@@ -1,7 +1,7 @@
 package ex.couponissue.coupon.service.distribute;
 
 import com.github.ksuid.KsuidGenerator;
-import ex.couponissue.aop.DistributedLock;
+import ex.couponissue.aop.distribute.DistributedLock;
 import ex.couponissue.coupon.domain.Coupon;
 import ex.couponissue.coupon.domain.CouponIssue;
 import ex.couponissue.coupon.infra.CouponRepository;
