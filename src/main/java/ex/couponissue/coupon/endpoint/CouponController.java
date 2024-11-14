@@ -5,7 +5,7 @@ import ex.couponissue.coupon.dto.response.CouponGetRes;
 import ex.couponissue.coupon.service.CouponService;
 import ex.couponissue.coupon.service.distribute.CouponIssueDistributeService;
 import ex.couponissue.coupon.service.lua_kafka.CouponIssueLuaKafkaService;
-import ex.couponissue.coupon.service.optimistic.CouponIssueOptimisticLockFacade;
+import ex.couponissue.coupon.service.optimistic.CouponIssueOptimisticService;
 import ex.couponissue.coupon.service.pessimistic.CouponIssuePessimisticService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +27,7 @@ public class CouponController {
     private final CouponService couponService;
     private final CouponIssueLuaKafkaService couponIssueLuaKafkaService;
     private final CouponIssuePessimisticService couponIssuePessimisticService;
-    private final CouponIssueOptimisticLockFacade couponIssueOptimisticLockFacade;
+    private final CouponIssueOptimisticService couponIssueOptimisticService;
     private final CouponIssueDistributeService couponIssueDistributeService;
 
     /**
@@ -62,7 +62,7 @@ public class CouponController {
      */
     @PostMapping("/{couponId}/issue/optimistic")
     public ResponseEntity<Void> issueCouponWithOptimistic(@PathVariable String couponId, @RequestParam String userId) {
-        couponIssueOptimisticLockFacade.issue(couponId, userId);
+        couponIssueOptimisticService.issue(couponId, userId);
         return ResponseEntity.ok().build();
     }
 
