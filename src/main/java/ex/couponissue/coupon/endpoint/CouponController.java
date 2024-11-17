@@ -58,7 +58,7 @@ public class CouponController {
     }
 
     /**
-     * 쿠폰 발급 - 낙관락 *** Coupon 엔티티의 `@Version` 어노테이션 주석 해제 꼭 하세요 ***
+     * 쿠폰 발급 - 낙관락
      */
     @PostMapping("/{couponId}/issue/optimistic")
     public ResponseEntity<Void> issueCouponWithOptimistic(@PathVariable String couponId, @RequestParam String userId) {
