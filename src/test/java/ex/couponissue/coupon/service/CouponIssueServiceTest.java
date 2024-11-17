@@ -4,6 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.github.ksuid.KsuidGenerator;
 import ex.couponissue.coupon.domain.Coupon;
+import ex.couponissue.coupon.domain.optimistic.CouponForOptimistic;
+import ex.couponissue.coupon.infra.CouponForOptimisticRepository;
 import ex.couponissue.coupon.infra.CouponRepository;
 import ex.couponissue.coupon.service.distribute.CouponIssueDistributeService;
 import ex.couponissue.coupon.service.optimistic.CouponIssueOptimisticService;
@@ -22,6 +24,7 @@ class CouponIssueServiceTest {
 
     private static final Integer maxQuantity = 100;
     private String couponId;
+    private String couponForOptimisticId;
 
     @Autowired
     private CouponIssuePessimisticService couponIssuePessimisticService;
@@ -35,11 +38,18 @@ class CouponIssueServiceTest {
     @Autowired
     private CouponRepository couponRepository;
 
+    @Autowired
+    private CouponForOptimisticRepository couponForOptimisticRepository;
+
     @BeforeEach
     void setUp() {
         Coupon coupon = Coupon.create(KsuidGenerator.generate(), "쿠폰-1", 0, maxQuantity);
         Coupon savedCoupon = couponRepository.save(coupon);
         couponId = savedCoupon.getId();
+
+        CouponForOptimistic couponForOptimistic = CouponForOptimistic.create(KsuidGenerator.generate(), "쿠폰-1", 0, maxQuantity);
+        CouponForOptimistic savedCouponForOptimistic = couponForOptimisticRepository.save(couponForOptimistic);
+        couponForOptimisticId = savedCouponForOptimistic.getId();
     }
 
     @AfterEach
@@ -54,7 +64,23 @@ class CouponIssueServiceTest {
 
     @Test
     public void 동시_쿠폰_발급_낙관적락() throws InterruptedException {
-        concurrentTest(() -> couponIssueOptimisticService.issue(couponId, KsuidGenerator.generate()));
+        ExecutorService executorService = Executors.newFixedThreadPool(32);
+        CountDownLatch latch = new CountDownLatch(maxQuantity);
+
+        for (int i = 0; i < maxQuantity; i++) {
+            executorService.submit(() -> {
+                try {
+                    couponIssueOptimisticService.issue(couponForOptimisticId, KsuidGenerator.generate());
+                } finally {
+                    latch.countDown();
+                }
+            });
+        }
+
+        latch.await();
+
+        CouponForOptimistic coupon = couponForOptimisticRepository.findById(couponForOptimisticId).orElseThrow();
+        assertThat(coupon.getNowQuantity()).isEqualTo(maxQuantity);
     }
 
     @Test
