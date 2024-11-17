@@ -1,8 +1,8 @@
 package ex.couponissue.coupon.service.lua_kafka;
 
-import ex.couponissue.coupon.domain.Coupon;
 import ex.couponissue.coupon.domain.CouponIssueRequestCode;
-import ex.couponissue.coupon.infra.CouponRepository;
+import ex.couponissue.coupon.domain.lua_kafka.CouponForLuaKafka;
+import ex.couponissue.coupon.infra.CouponForLuaKafkaRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,16 +19,15 @@ import org.springframework.web.client.HttpClientErrorException;
 public class RedisService {
 
     private final RedisScript<String> script;
-    private final CouponRepository couponRepository;
     private final StringRedisTemplate stringRedisTemplate;
+    private final CouponForLuaKafkaRepository couponForLuaKafkaRepository;
 
     /**
-     * 쿠폰의 최대 발급량만 캐싱하여 저장 - 1시간 TTL
+     * 쿠폰 저장 - 1시간 TTL
      */
-    @Cacheable(value = "coupon-max-quantity", key = "#couponId")
-    public int getMaxQuantity(String couponId) {
-        return couponRepository.findById(couponId)
-            .map(Coupon::getMaxQuantity)
+    @Cacheable(value = "coupon::", key = "#couponId")
+    public CouponForLuaKafka getCoupon(String couponId) {
+        return couponForLuaKafkaRepository.findById(couponId)
             .orElseThrow(() -> new HttpClientErrorException(HttpStatusCode.valueOf(404), "존재하지 않는 쿠폰입니다."));
     }
 
