@@ -20,6 +20,6 @@ public class CouponIssueListener {
     @KafkaListener(topics = "coupon.issue", groupId = "coupon.issue.create")
     public void listen(String message) throws JsonProcessingException {
         CouponIssueReq request = objectMapper.readValue(message, CouponIssueReq.class);
-        couponIssueLuaKafkaService.issueWithPessimisticLock(request.couponId(), request.userId());
+        couponIssueLuaKafkaService.issueWithNoLock(request.couponId(), request.userId());
     }
 }
