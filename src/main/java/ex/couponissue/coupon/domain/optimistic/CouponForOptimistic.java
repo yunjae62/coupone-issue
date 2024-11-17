@@ -41,14 +41,6 @@ public class CouponForOptimistic {
         return coupon;
     }
 
-    public void issue() {
-        if (nowQuantity >= maxQuantity) {
-            throw new IllegalArgumentException("발급할 수 있는 쿠폰이 없습니다.");
-        }
-
-        nowQuantity++;
-    }
-
     public void issue(CouponIssueForOptimistic couponIssue) {
         if (nowQuantity >= maxQuantity) {
             throw new IllegalArgumentException("발급할 수 있는 쿠폰이 없습니다.");
