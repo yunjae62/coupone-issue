@@ -23,9 +23,6 @@ public class Coupon {
     private Integer nowQuantity;
     private Integer maxQuantity;
 
-    //    @Version // 낙관적 락에 필요
-    private Long version = 0L;
-
     @OneToMany(mappedBy = "coupon", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true)
     private Set<CouponIssue> couponIssues;
 
